@@ -25,10 +25,11 @@ def guestbook_list(request):
         )
         # Json 형태 반환 데이터 생성
         new_guestbook_json = {
+            "id" : new_guestbook.id,
             "title" : new_guestbook.title,
             "guest" : new_guestbook.guest,
             "content" : new_guestbook.content,
-            "password" : new_guestbook.password,
+            "created" : new_guestbook.created.strftime("%Y-%m-%d")
         }
 
         return JsonResponse({
@@ -37,16 +38,17 @@ def guestbook_list(request):
             'data' : new_guestbook_json
         })
     if request.method == "GET":
-        guestbook_all = GuestBook.objects.all()
+        guestbook_all = GuestBook.objects.all().order_by('created')
 
         guestbook_json_all = []
 
         for guestbook in guestbook_all:
             guestbook_json = {
+                "id" : guestbook.id,
                 "title" : guestbook.title,
                 "guest" : guestbook.guest,
                 "content" : guestbook.content,
-                "password" : guestbook.password
+                "created" : guestbook.created.strftime("%Y-%m-%d")
             }
             guestbook_json_all.append(guestbook_json)
 
@@ -66,10 +68,11 @@ def guestbook_detail(request, guestbook_id): #이건 URL 경로 변수
         guestbook = get_object_or_404(GuestBook, pk=guestbook_id)
 
         guestbook_json = {
+            "id" : guestbook.id,
             "title" : guestbook.title,
             "guest" : guestbook.guest,
             "content" : guestbook.content,
-            "password" : guestbook.password
+            "created" : guestbook.created.strftime("%Y-%m-%d")
         }
 
         return JsonResponse({
